@@ -137,7 +137,7 @@ resource "aws_instance" "app_server" {
     ami = "ami-0084a47cc718c111a"
     instance_type = "c5.4xlarge"
     subnet_id = aws_subnet.public_subnet.id
-    associate_public_ip_address = false
+    associate_public_ip_address = true
     key_name = "ec2_keypair"
 
     tags = {
@@ -154,11 +154,6 @@ resource "aws_eip" "elastic_ip_fc" {
   
 }
 
-output "EIP" {
-
-    value = aws_eip.elastic_ip_fc.public_ip
-  
-}
 
 resource "aws_security_group" "sg_for_ec2" {
 
@@ -248,8 +243,7 @@ resource "aws_db_instance" "db_fc_instance" {
     parameter_group_name    = "default.mysql5.7"
     skip_final_snapshot     = true
     db_subnet_group_name    = aws_db_subnet_group.rds_subnet_group.name
-    
-
+    multi_az                = true
     #attaching the db security group
     vpc_security_group_ids = [ aws_security_group.sg_for_rds.id ]
     tags = {
@@ -265,6 +259,15 @@ resource "aws_db_instance" "db_fc_instance" {
 
 # Output EC2 public IP 
 output "ec2-publicip" {
+
     value = aws_instance.app_server.public_ip
+
 }
+
+output "EIP" {
+
+    value = aws_eip.elastic_ip_fc.public_ip
+  
+}
+
 
