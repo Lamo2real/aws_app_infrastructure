@@ -20,7 +20,7 @@ terraform plan
 
 ### deploy your changes to aws
 ```cmd
-terraform plan
+terraform apply
 ```
 
 # Terraform acts as infrastructure as documentations
